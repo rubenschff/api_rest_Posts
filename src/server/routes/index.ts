@@ -2,6 +2,8 @@ import { Router } from "express";
 import {  UsuariosController} from "../controllers";
 import { autenticateRoutes } from "../shared/middleware";
 import {RoutesEnum} from "./routes.enum";
+import {PostsTable} from "../database/ETableNames";
+import {PostsController} from "../controllers/posts";
 
 const router = Router();
 
@@ -24,6 +26,9 @@ router.put(RoutesEnum.usuario,autenticateRoutes,UsuariosController.updateByIdVal
 router.delete(RoutesEnum.usuario,autenticateRoutes,UsuariosController.deleteByIdValidation,UsuariosController.deleteById);
 
 
+//-------------------------------------------------Rota de posts-------------------------------------------------
+router.post(RoutesEnum.posts,autenticateRoutes, PostsController.createValidation, PostsController.create)
+router.put(RoutesEnum.posts, autenticateRoutes, PostsController.updateByIdValidation, PostsController.updateById)
 
 
 
