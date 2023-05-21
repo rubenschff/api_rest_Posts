@@ -9,8 +9,7 @@ export async function up(knex: Knex):Promise<void> {
             table.string(UsuarioTable.name, 150).checkLength('<=', 150).index().notNullable();
             table.string(UsuarioTable.email, 150).index().notNullable().unique();
             table.string(UsuarioTable.password).index().notNullable();
-            table.timestamp(UsuarioTable.created_at,{useTz: true}).defaultTo(knex.fn.now());
-            table.timestamp(UsuarioTable.updated_at,{useTz: true}).defaultTo(knex.fn.now());
+            table.timestamps(true,true,false)
         }).then(()=> {
         console.log(`# Created table ${Tables.usuario}`);
     });
