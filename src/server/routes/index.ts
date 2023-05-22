@@ -30,6 +30,7 @@ router.delete(RoutesEnum.usuario,autenticateRoutes,UsuariosController.deleteById
 router.post(RoutesEnum.posts,autenticateRoutes, PostsController.createValidation, PostsController.create)
 router.put(RoutesEnum.posts, autenticateRoutes, PostsController.updateByIdValidation, PostsController.updateById)
 router.delete(RoutesEnum.posts, autenticateRoutes, PostsController.deleteByIdValidation, PostsController.deleteById)
+router.get(RoutesEnum.posts, autenticateRoutes, PostsController.getAllValidation, PostsController.getAll)
 
 
 
