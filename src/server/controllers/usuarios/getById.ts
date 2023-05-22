@@ -15,7 +15,7 @@ export const getByIdValidation = validation((getSchema) => ({
 }));
 
 
-export const getById = async (req: Request<IParamProperties>, res: Response) => {
+export async function getById (req: Request<IParamProperties>, res: Response) {
 
   if (!req.headers.authorization){
     return res.status(StatusCodes.BAD_REQUEST).json({

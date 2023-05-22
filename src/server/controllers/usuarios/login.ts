@@ -17,7 +17,7 @@ export const loginValidation = validation((getSchema) => ({
     })),
   }));  
 
-export const login = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
+export async function login (req: Request<{}, {}, IBodyProps>, res: Response)  {
 
     const{email, password} = req.body;
 

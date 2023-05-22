@@ -26,7 +26,7 @@ export const updateByIdValidation = validation((getSchema) => ({
 }));
 
 //cria o usuário
-export const updateById = async (req: Request<IHeaderProperties,{},IBodyPropeties>, res: Response) => {
+export async function updateById (req: Request<IHeaderProperties,{},IBodyPropeties>, res: Response)  {
 
     if (!req.headers.authorization){
         return res.status(StatusCodes.BAD_REQUEST).json({

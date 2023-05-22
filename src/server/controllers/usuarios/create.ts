@@ -16,7 +16,7 @@ export const createValidation = validation((getSchema) => ({
 }));
 
 //cria o usuário
-export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
+export async function create (req: Request<{}, {}, IBodyProps>, res: Response) {
 
   const verifyUSerExists = await UsuarioProvider.getByEmail(req.body.email!);
 

@@ -3,7 +3,7 @@ import {Tables, UsuarioTable} from "../../ETableNames";
 import {Knex} from "../../knex";
 import {IUsuario} from "../../models";
 
-export const updateById = async (id: number, usuario: Omit<IUsuario, "id">): Promise<IUsuario | Error> => {
+export async function updateById (id: number, usuario: Omit<IUsuario, "id">): Promise<IUsuario | Error>  {
 
   try {
     if(usuario.password){

@@ -15,7 +15,7 @@ export const deleteByIdValidation = validation((getSchema) => ({
 }));
 
 //cria o usuário
-export const deleteById = async (req: Request<IHeaderProperties>, res: Response) => {
+export async function deleteById (req: Request<IHeaderProperties>, res: Response) {
 
   if (!req.headers.authorization){
     return res.status(StatusCodes.BAD_REQUEST).json({

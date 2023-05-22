@@ -2,7 +2,7 @@ import { Tables, UsuarioTable} from "../../ETableNames";
 import { Knex } from "../../knex";
 import { IUsuario } from "../../models";
 
-export const getById = async (id: number):Promise<IUsuario|Error> => {
+export async function getById (id: number):Promise<IUsuario|Error>  {
   try {
     const usuario = await Knex(Tables.usuario)
       .select(

@@ -6,7 +6,7 @@ import {JWTservice} from "../../../shared/services/JWTservice";
 
 
 
-export const create = async (usuario: Omit<IUsuario, 'id'>): Promise<IUsuario| Error> => {
+export async function create (usuario: Omit<IUsuario, 'id'>): Promise<IUsuario| Error> {
     try {
         const hashedPassword = await passwordCrypto.hashPassword(usuario.password!);
         const user = await Knex(Tables.usuario)
