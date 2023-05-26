@@ -4,6 +4,8 @@ import { autenticateRoutes } from "../shared/middleware";
 import {RoutesEnum} from "./routes.enum";
 import {PostsTable} from "../database/ETableNames";
 import {PostsController} from "../controllers/posts";
+import swaggerUi from 'swagger-ui-express'
+import swaggerDocument from "../../swagger.json"
 
 const router = Router();
 
@@ -11,6 +13,11 @@ router.get("/", (req, res) => {
   return res.send("Bem vindo!");
 });
 
+
+//------------------------------------------------- API-Document -------------------------------------------------
+
+router.use('/docs', swaggerUi.serve);
+router.get('/docs', swaggerUi.setup(swaggerDocument));
 
 //-------------------------------------------------Login e Cadastro-------------------------------------------------
 router.post(RoutesEnum.cadastrar,UsuariosController.createValidation,UsuariosController.create);

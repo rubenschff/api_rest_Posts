@@ -1,0 +1,376 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Post REST API",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "paths": {
+    "/cadastrar": {
+      "post": {
+        "summary": "Cadastro de usuário",
+        "description": "Rota para cadastro e autenticação de usuário",
+        "tags": ["Entrar/Cadastrar"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  }
+                },
+                "example":{
+                  "name": "João Pedro",
+                  "email": "joao@posts.com.br",
+                  "password": "123123"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário cadastrado com sucesso!"
+          },
+          "400":{
+            "description": "Campos obrigatórios"
+          },
+          "401": {
+            "description": "Usuário ja cadastrado"
+          }
+        }
+      }
+    },
+    "/entrar": {
+      "post": {
+        "summary": "Login de usuário",
+        "description": "Rota para login e autenticação de usuário",
+        "tags": ["Entrar/Cadastrar"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  }
+                },
+                "example":{
+                  "email": "joao@posts.com.br",
+                  "password": "123123"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400":{
+            "description": "Campos obrigatórios"
+          },
+          "401": {
+            "description": "Senha incorreta"
+          },
+          "404": {
+            "description": "Usuário não cadastrado"
+          }
+        }
+      }
+    },
+    "/usuario": {
+      "get": {
+        "security": [{"bearerAuth": []}],
+        "summary": "Informações do usuário",
+        "description": "Rota para recuperar informações do usuário",
+        "tags": ["Usuario"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Não autenticado"
+          }
+        }
+      },
+      "patch": {
+        "security": [{"bearerAuth": []}],
+        "summary": "Alterar usuário",
+        "description": "Rota para alterar dados do usuário",
+        "tags": ["Usuario"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Nome do usuário"
+          },
+          {
+            "in": "path",
+            "name": "email",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Email do usuário"
+          },
+          {
+            "in": "path",
+            "name": "oldPassword",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Senha atual senha"
+          },
+          {
+            "in": "path",
+            "name": "password",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Nova senha"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "email": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "oldPassword": {
+                    "type": "string",
+                    "required": false
+                  }
+                },
+                "example":{
+                  "name": "João Paulo",
+                  "email": "joao@posts.com.br",
+                  "oldPassword": "123123",
+                  "password": "123124"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Email em uso por outro usuário / não informou a senha ou senha antiga para trocar a senha"
+          },
+          "401": {
+            "description": "Não autenticado"
+          }
+        }
+      },
+      "delete": {
+        "security": [{"bearerAuth": []}],
+        "summary": "Excluir usuário",
+        "description": "Rota para excluir dados do usuário",
+        "tags": ["Usuario"],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "401": {
+            "description": "Não autenticado"
+          }
+        }
+      }
+    },
+    "/posts": {
+      "post": {
+        "security": [{"bearerAuth": []}],
+        "summary": "Cadastro de post",
+        "description": "Rota para cadastro de posts do usuário",
+        "tags": ["Posts"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "autor": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "titulo": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "conteudo": {
+                    "type": "string",
+                    "required": true
+                  }
+                },
+                "example":{
+                  "autor": "João Pedro",
+                  "titulo": "Why do we use it?",
+                  "conteudo": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Post cadastrado com sucesso!"
+          },
+          "400":{
+            "description": "Campos obrigatórios"
+          }
+        }
+      },
+      "get": {
+        "security": [{"bearerAuth": []}],
+        "summary": "Posts do usuário",
+        "description": "Rota para recuperar informações de posts usuário",
+        "tags": ["Posts"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Não autenticado"
+          }
+        }
+      },
+      "patch": {
+        "security": [{"bearerAuth": []}],
+        "summary": "Alterar posts",
+        "description": "Rota para alterar dados do usuário",
+        "tags": ["Posts"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "required": false,
+                    "example": true
+                  },
+                  "autor": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "titulo": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "conteudo": {
+                    "type": "string",
+                    "required": false
+                  }
+                },
+                "example":{
+                  "id": 1,
+                  "autor": "Pedro Augusto",
+                  "titulo": "Why do we use it?",
+                  "conteudo": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "id do post é obrigatório"
+          },
+          "401": {
+            "description": "Não autenticado"
+          }
+        }
+      },
+      "delete": {
+        "security": [{"bearerAuth": []}],
+        "summary": "Excluir post",
+        "description": "Rota para excluir dados do usuário",
+        "tags": ["Posts"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "required": false,
+                    "example": true
+                  }
+                },
+                "example":{
+                  "id": 1
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "401": {
+            "description": "Não autenticado"
+          },
+          "404": {
+            "description": "Post não econtrado ou não pertencente ao usuário"
+          }
+        }
+      }
+    }
+  }
+}
