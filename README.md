@@ -1,5 +1,6 @@
 # api_rest_Posts
 
+Execute `pnpm intall` para instalar as dependências
 
 Foi usado banco de dados PostgresSQL. 
 
