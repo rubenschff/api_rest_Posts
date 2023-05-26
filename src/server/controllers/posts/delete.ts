@@ -7,18 +7,18 @@ import {JWTservice} from "../../shared/services/JWTservice";
 import {PostsProvider} from "../../database/providers/posts";
 
 interface Post{
-    id: number
+    id?: number
 }
 export const deleteByIdValidation = validation((getSchema) => ({
     header: getSchema<CookieDto>(yup.object().shape({
         authorization: yup.string().required()
     })),
-    body: getSchema<Post>(yup.object().shape({
+    query: getSchema<Post>(yup.object().shape({
         id: yup.number().integer().moreThan(0).required(),
     })),
 }));
 
-export async function deleteById(req: Request<{},Post>, res: Response) {
+export async function deleteById(req: Request<{},{},{},Post>, res: Response) {
 
     const [type, token] = req.headers.authorization!.split(' ');
 
@@ -26,7 +26,7 @@ export async function deleteById(req: Request<{},Post>, res: Response) {
 
     if (typeof auth === 'object'){
 
-        const deleted = await PostsProvider.deleteById(req.body.id, auth.uid)
+        const deleted = await PostsProvider.deleteById(req.query.id!, auth.uid)
 
         if (deleted instanceof Error){
             return res.status(StatusCodes.BAD_REQUEST).json({
