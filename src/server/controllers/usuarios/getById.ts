@@ -17,15 +17,9 @@ export const getByIdValidation = validation((getSchema) => ({
 
 export async function getById (req: Request<IParamProperties>, res: Response) {
 
-  if (!req.headers.authorization){
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      default:{
-        error: 'O token precisa ser informado no header'
-      }  
-    })
-  }
+  const [type, token] = req.headers.authorization!.split(' ');
 
-  const auth = JWTservice.verify(req.headers.authorization!)
+  const auth = JWTservice.verify(token)
 
   if (typeof auth === 'object'){
     const usuario = await UsuarioProvider.getById(auth.uid);

@@ -25,15 +25,11 @@ export const createValidation = validation((getSchema) => ({
 
 export async function create (req: Request<{},Post>, res: Response)  {
 
-    if (!req.headers.authorization){
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            default:{
-                error: 'O token precisa ser informado no header'
-            }
-        })
-    }
+    const [type, token] = req.headers.authorization!.split(' ');
 
-    const auth = JWTservice.verify(req.headers.authorization!)
+    const auth = JWTservice.verify(token)
+
+    console.log(auth)
 
     if (typeof auth === 'object'){
         const post = await req.body

@@ -17,16 +17,9 @@ export const deleteByIdValidation = validation((getSchema) => ({
 //cria o usuário
 export async function deleteById (req: Request<IHeaderProperties>, res: Response) {
 
-  if (!req.headers.authorization){
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      default:{
-        error: 'O token precisa ser informado no header'
-      }
-    })
-  }
+  const [type, token] = req.headers.authorization!.split(' ');
 
-
-  const auth = await JWTservice.verify(req.headers.authorization)
+  const auth = JWTservice.verify(token)
 
   if (typeof auth === 'object'){
 

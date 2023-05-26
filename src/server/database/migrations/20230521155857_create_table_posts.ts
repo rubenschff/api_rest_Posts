@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
         table.text(PostsTable.titulo).notNullable().index();
         table.text(PostsTable.conteudo).notNullable().index();
         table.text(PostsTable.autor).notNullable().index()
-        table.integer(PostsTable.usuario_id).references('usuario.id').notNullable().index();
+        table.integer(PostsTable.usuario_id).references('usuario.id').notNullable().onDelete('CASCADE').index();
         table.timestamps(true,true,false);
     }).then(()=>{
         console.log(`# Created table ${Tables.posts}`)

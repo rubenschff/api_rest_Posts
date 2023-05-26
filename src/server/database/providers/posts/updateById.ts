@@ -7,11 +7,11 @@ interface Post extends Omit<PostsDto, 'usuario_id'|'titulo'|'conteudo'|'autor'>{
     conteudo?: string;
     autor?: string;
 }
-export async function updateById(post: Post, id: number) {
+export async function updateById(post: Post) {
 
     const update = await Knex(Tables.posts)
         .update(post)
-        .where(PostsTable.id, id)
+        .where(PostsTable.id, post.id)
         .returning<PostsDto[]>('*')
         .catch(e => {
             return Error(e)

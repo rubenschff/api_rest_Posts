@@ -27,21 +27,17 @@ export const updateByIdValidation = validation((getSchema) => ({
 
 export async function updateById (req: Request<{},Post>, res: Response)  {
 
-    if (!req.headers.authorization){
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            default:{
-                error: 'O token precisa ser informado no header'
-            }
-        })
-    }
+    const [type, token] = req.headers.authorization!.split(' ');
 
-    const auth = JWTservice.verify(req.headers.authorization!)
+    const auth = JWTservice.verify(token)
 
     if (typeof auth === 'object'){
 
         const post:Post = req.body
 
-        const update = await PostsProvider.updateById(post, auth.uid)
+        console.log(post)
+
+        const update = await PostsProvider.updateById(post)
 
         if (update instanceof Error){
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -49,7 +45,8 @@ export async function updateById (req: Request<{},Post>, res: Response)  {
             })
         }
 
-        return res.status(StatusCodes.CREATED).json(update)
+        console.log(update)
+        return res.status(StatusCodes.OK).json(update)
     }
 
 
