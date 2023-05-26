@@ -21,14 +21,14 @@ router.post(RoutesEnum.entrar, UsuariosController.loginValidation,UsuariosContro
 // @ts-ignore
 router.get(RoutesEnum.usuario,autenticateRoutes,UsuariosController.getByIdValidation,UsuariosController.getById);
 // @ts-ignore
-router.put(RoutesEnum.usuario,autenticateRoutes,UsuariosController.updateByIdValidation,UsuariosController.updateById);
+router.patch(RoutesEnum.usuario,autenticateRoutes,UsuariosController.updateByIdValidation,UsuariosController.updateById);
 // @ts-ignore
 router.delete(RoutesEnum.usuario,autenticateRoutes,UsuariosController.deleteByIdValidation,UsuariosController.deleteById);
 
 
 //-------------------------------------------------Rota de posts-------------------------------------------------
 router.post(RoutesEnum.posts,autenticateRoutes, PostsController.createValidation, PostsController.create)
-router.put(RoutesEnum.posts, autenticateRoutes, PostsController.updateByIdValidation, PostsController.updateById)
+router.patch(RoutesEnum.posts, autenticateRoutes, PostsController.updateByIdValidation, PostsController.updateById)
 router.delete(RoutesEnum.posts, autenticateRoutes, PostsController.deleteByIdValidation, PostsController.deleteById)
 router.get(RoutesEnum.posts, autenticateRoutes, PostsController.getAllValidation, PostsController.getAll)
 

@@ -5,7 +5,7 @@ import { validation } from "../../shared/middleware";
 import {IUsuario} from "../../database/models";
 import {UsuarioProvider} from "../../database/providers/usuario";
 
-interface IBodyProps extends Omit<IUsuario, 'id'|'accessToken'> { }
+interface IBodyProps extends Omit<IUsuario, 'id'|'token'> { }
 
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
@@ -23,21 +23,16 @@ export async function create (req: Request<{}, {}, IBodyProps>, res: Response) {
   if (verifyUSerExists instanceof Error){
 
     const result = await UsuarioProvider.create(req.body);
+    console.log(result)
 
     if (result instanceof Error){
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        errors:{
-          default: result.message
-        }
-      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error: result.message});
     }
 
     return res.status(StatusCodes.CREATED).json(result);
   }
 
   return res.status(StatusCodes.UNAUTHORIZED).json({
-    errors:{
-      default: 'Usuário ja cadastrado!'
-    }
+      error: 'Usuário ja cadastrado!'
   });
 };

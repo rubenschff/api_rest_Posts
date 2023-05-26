@@ -30,14 +30,17 @@ export async function getById (req: Request<IParamProperties>, res: Response) {
   if (typeof auth === 'object'){
     const usuario = await UsuarioProvider.getById(auth.uid);
     console.log(usuario);
+
     if(usuario instanceof Error){
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        default:{
-          error: usuario.message
-        }
-      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error: usuario.message});
     }
-    return res.status(StatusCodes.OK).json(usuario);
+    return res.status(StatusCodes.OK).json(
+        {
+          id: usuario.id,
+          name: usuario.name,
+          email: usuario.email
+        }
+    );
   }
 
   return res.status(StatusCodes.UNAUTHORIZED).json(auth)

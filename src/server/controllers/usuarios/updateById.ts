@@ -9,7 +9,7 @@ import {passwordCrypto} from "../../shared/services";
 
 interface IHeaderProperties extends CookieDto{ }
 
-interface IBodyPropeties extends Omit<IUsuario, 'id'|'accessToken'>{
+interface IBodyPropeties extends Omit<IUsuario, 'id'|'token'>{
     oldPassword?: string;
 }
 
@@ -30,38 +30,43 @@ export async function updateById (req: Request<IHeaderProperties,{},IBodyPropeti
 
     if (!req.headers.authorization){
         return res.status(StatusCodes.BAD_REQUEST).json({
-            default:{
-                error: 'O token precisa ser informado no header'
-            }
+            error: 'O token precisa ser informado no header'
         })
-    }
-
-    if (req.body.email){
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            error: 'Não é permitido alterar o email!'
-        });
     }
 
     const auth = JWTservice.verify(req.headers.authorization!)
 
     if (typeof auth === 'object'){
 
+        if (req.body.email){
+
+            const verifyEmail = await UsuarioProvider.getByEmail(req.body.email)
+
+            if (verifyEmail instanceof Error){
+
+            }else if (verifyEmail.id != auth.uid){
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: 'Email em uso, insira outro'
+                });
+            }
+
+        }
+
         if(req.body.password || req.body.oldPassword){
+
             if (!req.body.oldPassword){
-                return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-                    .json({error: 'Informe a senha antiga no campo oldPassword'})
+                return res.status(StatusCodes.BAD_REQUEST)
+                    .json({error: 'Informe a senha antiga'})
             } else if (!req.body.password){
-                return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-                    .json({error: 'Informe a senha no campo password'})
+                return res.status(StatusCodes.BAD_REQUEST)
+                    .json({error: 'Informe a nova senha'})
             }
 
             const oldUser = await UsuarioProvider.getById(auth.uid)
 
             if (oldUser instanceof Error){
                 return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                    default:{
-                        error: oldUser.message
-                    }
+                    error: oldUser.message
                 });
             }
 
@@ -69,7 +74,7 @@ export async function updateById (req: Request<IHeaderProperties,{},IBodyPropeti
 
             if (!oldPassword){
                 return res.status(StatusCodes.BAD_REQUEST).json({
-                    error: 'Senha incorreta'
+                    error: 'Verifique a sua senha atual e tente novamente'
                 });
             }
 
@@ -81,9 +86,7 @@ export async function updateById (req: Request<IHeaderProperties,{},IBodyPropeti
         if(update instanceof Error){
             console.log(update);
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                default:{
-                    error: update.message
-                }
+                error: update.message
             });
         }
         return res.status(StatusCodes.OK).json(update);

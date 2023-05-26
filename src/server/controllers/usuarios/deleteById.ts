@@ -31,13 +31,10 @@ export async function deleteById (req: Request<IHeaderProperties>, res: Response
   if (typeof auth === 'object'){
 
     const result = await UsuarioProvider.deleteById(auth.uid);
+    console.log(result)
 
     if (result instanceof Error){
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        errors:{
-          default: result.message
-        }
-      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error: result.message});
     }
 
 

@@ -24,8 +24,8 @@ export async function create (usuario: Omit<IUsuario, 'id'>): Promise<IUsuario| 
             return user
         }
 
-        const accessToken = JWTservice.sign({uid: user[0].id})
-        return {...user[0],accessToken: accessToken};
+        const token = JWTservice.sign({uid: user[0].id})
+        return {...user[0],token: token};
 
     }  catch (e) {
         console.log(e);

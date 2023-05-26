@@ -14,7 +14,7 @@ export const getAllValidation = validation((getSchema) => ({
         authorization: yup.string().required()
     })),
     query: getSchema<QueryParams>(yup.object().shape({
-       id: yup.number().integer().moreThan(0).default(0).notRequired(),
+       id: yup.number().integer().default(0).notRequired(),
     })),
 }));
 

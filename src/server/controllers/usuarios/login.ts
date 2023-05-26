@@ -8,7 +8,7 @@ import { passwordCrypto } from "../../shared/services";
 import { JWTservice } from "../../shared/services/JWTservice";
 
 
-interface IBodyProps extends Omit<IUsuario, 'id'|'name'|'accessToken'> {  }
+interface IBodyProps extends Omit<IUsuario, 'id'|'name'|'token'> {  }
 
 export const loginValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
@@ -22,27 +22,25 @@ export async function login (req: Request<{}, {}, IBodyProps>, res: Response)  {
     const{email, password} = req.body;
 
     const usuario = await UsuarioProvider.getByEmail(email!);
+    console.log(usuario)
 
     if (usuario instanceof Error){
         return res.status(StatusCodes.NOT_FOUND).json({
-          errors:{
-            default: 'Usuário não cadastrado!'
-          }
+          error: 'Usuário não cadastrado!'
         });
       }
       
     const checkPassword = await passwordCrypto.verifyPassword(password!, usuario.password!);
+    console.log(checkPassword)
       if (!checkPassword) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-            errors:{
-              default: 'Senha incorreta!'
-            }
-          });
+        return res.status(StatusCodes.UNAUTHORIZED).json({error: 'Senha incorreta!'});
       } else {
-            const accessToken = await JWTservice.sign({uid: usuario.id})
+            const token = await JWTservice.sign({uid: usuario.id})
             return res.status(StatusCodes.OK).json({
-                ...usuario,
-                accessToken: accessToken
+                id: usuario.id,
+                name: usuario.name,
+                email: usuario.email,
+                token: token
             })
       }
 
