@@ -1,9 +1,8 @@
 import {IUsuario} from "../../models";
-import  { Knex} from "../../knex";
+import {Knex} from "../../knex";
 import {Tables, UsuarioTable} from "../../ETableNames";
-import { passwordCrypto } from "../../../shared/services";
+import {passwordCrypto} from "../../../shared/services";
 import {JWTservice} from "../../../shared/services/JWTservice";
-
 
 
 export async function create (usuario: Omit<IUsuario, 'id'>): Promise<IUsuario| Error> {
@@ -12,6 +11,7 @@ export async function create (usuario: Omit<IUsuario, 'id'>): Promise<IUsuario| 
         const user = await Knex(Tables.usuario)
             .insert({...usuario, password: hashedPassword})
             .returning<IUsuario[]>([
+                UsuarioTable.id,
                 UsuarioTable.name,
                 UsuarioTable.email,
                 UsuarioTable.password,

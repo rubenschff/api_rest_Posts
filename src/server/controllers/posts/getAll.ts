@@ -35,9 +35,6 @@ export async function getAll(req: Request<{},{},{},QueryParams>, res: Response) 
             })
         }
 
-        if (posts.length == 1){
-            return res.status(StatusCodes.OK).json(posts[0])
-        }
 
         return res.status(StatusCodes.OK).json(posts)
     }
